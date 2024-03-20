@@ -56,7 +56,12 @@ class _GetStartedPageState extends State<GetStartedPage> {
               const SizedBox(
                 height: 25,
               ),
-              const MyButton()
+              MyButton(
+                onTap: () {
+                  Navigator.pushNamed(context, '/homepage');
+                },
+                text: "Get Started",
+              )
             ],
           ),
         ),
