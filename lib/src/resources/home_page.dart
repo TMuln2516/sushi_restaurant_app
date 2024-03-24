@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:sushi_restaurant_app/src/components/foodtile.dart';
 import 'package:sushi_restaurant_app/src/components/mybutton.dart';
-import 'package:sushi_restaurant_app/src/models/food.dart';
+import 'package:sushi_restaurant_app/src/models/shop.dart';
+import 'package:sushi_restaurant_app/src/resources/fooddetail_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,27 +14,35 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List foodMenu = [
-    Food(
-        name: "Chirashi sushi",
-        price: "21.00",
-        imagePath: "assets/images/chirashi.png",
-        rate: "4.9"),
-    Food(
-        name: "Nigiri sushi",
-        price: "25.00",
-        imagePath: "assets/images/nigiri.png",
-        rate: "4.9"),
-    Food(
-        name: "Salmon sushi",
-        price: "21.00",
-        imagePath: "assets/images/salmon.png",
-        rate: "4.9")
-  ];
+  bool isLiked = false;
+
+  void toggleLike() {
+    setState(() {
+      isLiked = !isLiked;
+    });
+  }
+
+  void showDescription(int index) {
+    // get Shop
+    final shop = context.read<Shop>();
+    final foodMenu = shop.foodMenu;
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FoodDetailPage(
+            food: foodMenu[index],
+          ),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
+    // get Shop
+    final shop = context.read<Shop>();
+    final foodMenu = shop.foodMenu;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFDCDBDC),
       appBar: AppBar(
         centerTitle: true,
@@ -42,6 +52,13 @@ class _HomePageState extends State<HomePage> {
           "MENU",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/cartpage');
+              },
+              icon: const Icon(Icons.shopping_cart))
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,6 +122,7 @@ class _HomePageState extends State<HomePage> {
               itemCount: foodMenu.length,
               itemBuilder: (context, index) => FoodTile(
                 food: foodMenu[index],
+                onTap: () => showDescription(index),
               ),
             ),
           ),
@@ -115,30 +133,45 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(20)),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset(
-                  "assets/images/nigiri.png",
-                  height: 80,
+                Row(
+                  children: [
+                    Image.asset(
+                      "assets/images/nigiri.png",
+                      height: 80,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Nigiri Sushi",
+                            style: GoogleFonts.dmSerifDisplay(),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "\$25.00",
+                            style: GoogleFonts.dmSerifDisplay(),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Nigiri Sushi",
-                        style: GoogleFonts.dmSerifDisplay(),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        "\$25.00",
-                        style: GoogleFonts.dmSerifDisplay(),
-                      )
-                    ],
+                  padding: const EdgeInsets.all(8),
+                  child: IconButton(
+                    onPressed: toggleLike,
+                    icon: isLiked
+                        ? const Icon(Icons.favorite)
+                        : const Icon(Icons.favorite_border),
+                    color: isLiked ? Colors.red : null,
                   ),
-                ),
+                )
               ],
             ),
           )
