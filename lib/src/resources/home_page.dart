@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sushi_restaurant_app/src/components/drawer.dart';
 import 'package:sushi_restaurant_app/src/components/foodtile.dart';
-import 'package:sushi_restaurant_app/src/components/mybutton.dart';
+import 'package:sushi_restaurant_app/src/components/button.dart';
 import 'package:sushi_restaurant_app/src/models/shop.dart';
 import 'package:sushi_restaurant_app/src/resources/fooddetail_page.dart';
 
@@ -47,7 +48,6 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
-        leading: const Icon(Icons.menu),
         title: const Text(
           "MENU",
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> {
               icon: const Icon(Icons.shopping_cart))
         ],
       ),
+      drawer: const MyDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sushi_restaurant_app/src/components/mybutton.dart';
+import 'package:sushi_restaurant_app/src/components/button.dart';
 import 'package:sushi_restaurant_app/src/models/food.dart';
 import 'package:sushi_restaurant_app/src/models/shop.dart';
 
@@ -37,8 +37,8 @@ class CartPage extends StatelessWidget {
 
                   //Food name
                   final String foodName = food.name;
-
                   final String foodPrice = food.price;
+                  final String foodImage = food.imagePath;
                   return Container(
                     margin: const EdgeInsets.only(left: 20, top: 20, right: 20),
                     decoration: BoxDecoration(
@@ -47,6 +47,7 @@ class CartPage extends StatelessWidget {
                     child: ListTile(
                       textColor: Colors.white,
                       iconColor: Colors.white,
+                      leading: Image.asset(foodImage),
                       title: Text(
                         foodName,
                         style: const TextStyle(
